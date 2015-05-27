@@ -1,6 +1,5 @@
 package uklid.com.pipesurvey;
 
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -13,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Uklid on 5/25/2015.
+ * Created by Uklid on 5/27/2015.
  */
-public class PipeSurveysListLoader extends AsyncTaskLoader<List<PipeSurvey>> {
+public class PipeSurveysListLoader  extends AsyncTaskLoader<List<PipeSurvey>>  {
     private static final String LOG_TAG = PipeSurveysListLoader.class.getSimpleName();
-    private List<PipeSurvey> mPipeSurveys;
+    private List<PipeSurvey> mPipeSurvey;
     private ContentResolver mContentResolver;
     private Cursor mCursor;
 
@@ -29,27 +28,28 @@ public class PipeSurveysListLoader extends AsyncTaskLoader<List<PipeSurvey>> {
     @Override
     public List<PipeSurvey> loadInBackground() {
         String[] projection = {BaseColumns._ID,
-                FriendsContract.FriendsColumns.FRIENDS_NAME,
-                FriendsContract.FriendsColumns.FRIENDS_PHONE,
-                FriendsContract.FriendsColumns.FRIENDS_EMAIL
+                PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_PIPECODE,
+                PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_CODE,
+                PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_UTILIZATION
         };
 
-        List<Friend> entries = new ArrayList<Friend>();
+        List<PipeSurvey> entries = new ArrayList<PipeSurvey>();
 
-        mCursor = mContentResolver.query(FriendsContract.URI_TABLE, projection,null,null,null);
+        mCursor = mContentResolver.query(PipeSurveysContract.URI_TABLE, projection,null,null,null);
         if(mCursor != null) {
             if(mCursor.moveToFirst()) {
                 do {
                     int _id = mCursor.getInt(mCursor.getColumnIndex(BaseColumns._ID));
-                    String name = mCursor.getString(
-                            mCursor.getColumnIndex(FriendsContract.FriendsColumns.FRIENDS_NAME));
-                    String phone = mCursor.getString(
-                            mCursor.getColumnIndex(FriendsContract.FriendsColumns.FRIENDS_PHONE));
-                    String email = mCursor.getString(
-                            mCursor.getColumnIndex(FriendsContract.FriendsColumns.FRIENDS_EMAIL));
+                    String pipecode = mCursor.getString(
+                            mCursor.getColumnIndex(PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_PIPECODE));
+                    String code = mCursor.getString(
+                            mCursor.getColumnIndex(PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_CODE));
+                    String utilization = mCursor.getString(
+                            mCursor.getColumnIndex(PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_UTILIZATION));
 
-                    Friend friend = new Friend(_id,name,phone,email);
-                    entries.add(friend);
+                    PipeSurvey pipeSurvey = new PipeSurvey(_id, pipecode,"sheetno","date",code,"order",utilization,"type","name","no","moo","soi","road",
+                            "subdistrict","district","province","po","telephone",1/*noccupant*/,"foccupant",1/*nstorey*/,1/*nroom*/,"material","construction","picturename");
+                    entries.add(pipeSurvey);
                 } while(mCursor.moveToNext());
             }
         }
@@ -57,35 +57,35 @@ public class PipeSurveysListLoader extends AsyncTaskLoader<List<PipeSurvey>> {
     }
 
     @Override
-    public void deliverResult(List<Friend> friends) {
+    public void deliverResult(List<PipeSurvey> pipeSurveys) {
         if(isReset()) {
-            if (friends != null) {
+            if (pipeSurveys != null) {
                 mCursor.close();
             }
         }
 
-        List<Friend> oldFriendList = mFriends;
-        if(mFriends == null || mFriends.size() == 0) {
+        List<PipeSurvey> oldPipeSurveysList = mPipeSurvey;
+        if(mPipeSurvey == null || mPipeSurvey.size() == 0) {
             Log.d(LOG_TAG, "+++++++++ No Data Return");
         }
 
-        mFriends = friends;
+        mPipeSurvey = pipeSurveys;
         if(isStarted()) {
-            super.deliverResult(friends);
+            super.deliverResult(pipeSurveys);
         }
 
-        if(oldFriendList != null && oldFriendList != friends) {
+        if(oldPipeSurveysList != null && oldPipeSurveysList != pipeSurveys) {
             mCursor.close();
         }
     }
 
     @Override
     protected void onStartLoading() {
-        if(mFriends!=null) {
-            deliverResult(mFriends);
+        if(mPipeSurvey!=null) {
+            deliverResult(mPipeSurvey);
         }
 
-        if(takeContentChanged() || mFriends == null) { //reload data again
+        if(takeContentChanged() || mPipeSurvey == null) { //reload data again
             forceLoad();
         }
     }
@@ -102,12 +102,12 @@ public class PipeSurveysListLoader extends AsyncTaskLoader<List<PipeSurvey>> {
             mCursor.close();
         }
 
-        mFriends = null;
+        mPipeSurvey = null;
     }
 
     @Override
-    public void onCanceled(List<Friend> friends) {
-        super.onCanceled(friends);
+    public void onCanceled(List<PipeSurvey> pipeSurveys) {
+        super.onCanceled(pipeSurveys);
 
         if(mCursor != null) {
             mCursor.close();
