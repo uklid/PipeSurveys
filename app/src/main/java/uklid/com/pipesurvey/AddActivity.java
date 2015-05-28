@@ -1,6 +1,7 @@
 package uklid.com.pipesurvey;
 
 import android.app.ProgressDialog;
+import android.content.AsyncTaskLoader;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -25,18 +26,22 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.Provider;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
 
 /**
  * Created by Uklid on 5/28/2015.
@@ -60,8 +65,9 @@ public class AddActivity extends FragmentActivity{
     JSONParser jsonParser = new JSONParser();
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
-    private static final String LOGIN_URL = "http://http://uklidyeesarapat.com/addSurvey.php";
+    private static final String LOGIN_URL = "http://uklidyeesarapat.com/addSurvey.php";
     private String fileName;
+    private File myPath;
     //ENDJSON
 
 
@@ -196,11 +202,14 @@ public class AddActivity extends FragmentActivity{
                     Bitmap bitmapImage = ((BitmapDrawable)mImage.getDrawable()).getBitmap();
                     ContextWrapper cw = new ContextWrapper(getApplicationContext());
                     File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-                    File myPath = new File(directory,fileName);
+                    myPath = new File(directory,fileName);
                     FileOutputStream fos = null;
                     try{
                         fos = new FileOutputStream(myPath);
-                        bitmapImage.compress(Bitmap.CompressFormat.PNG,100,fos);
+                        bitmapImage.compress(Bitmap.CompressFormat.PNG,0,fos);
+
+
+
                         fos.close();
                     }catch (Exception e) {
                         e.printStackTrace();
@@ -215,9 +224,18 @@ public class AddActivity extends FragmentActivity{
                     //start parser
 
 
-
+                    new AddPipeSurvaeysToServer().execute();
 
                     //finish parser
+
+                    //upload image
+                    new AddFileToServer().execute();
+
+
+
+
+
+
 
                     Log.d(LOG_TAG, "record id returned is " + returned.toString());
                     Intent intent = new Intent(AddActivity.this, MainActivity.class);
@@ -229,7 +247,7 @@ public class AddActivity extends FragmentActivity{
 
 
                 } else {
-                    Toast.makeText(getApplicationContext(), "Please ensure you have entered some valid data.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "ป้อนข้อมูลไม่ครบ", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -252,7 +270,8 @@ public class AddActivity extends FragmentActivity{
                 mUtilization.getText().toString().length() == 0||
         mNRoom.getText().toString().length() == 0||
                 mNOccupant.getText().toString().length()==0||
-                mNStorey.getText().toString().length()==0)
+                mNStorey.getText().toString().length()==0 ||
+                mImage.getDrawable() == null)
         {
             return false;
         } else {
@@ -285,6 +304,31 @@ public class AddActivity extends FragmentActivity{
     }
 
 
+    class AddFileToServer extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            FTPClient con = null;
+
+            con = new FTPClient();
+            try {
+                con.connect("uklidyeesarapat.com");
+
+                if (con.login("uklid@uklidyeesarapat.com", "Default01")) {
+                    con.enterLocalPassiveMode();
+                    con.setFileType(FTP.BINARY_FILE_TYPE);
+
+                    FileInputStream in = new FileInputStream(myPath);
+                    boolean result = con.storeFile("/htdocs/surveyImages/" + fileName, in);
+                    in.close();
+                }
+            }catch (IOException e)
+            {
+            }
+
+
+            return null;
+        }
+    }
 
     class AddPipeSurvaeysToServer extends AsyncTask<String, String, String> {
 
@@ -296,11 +340,7 @@ public class AddActivity extends FragmentActivity{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(AddActivity.this);
-            pDialog.setMessage("Upload Data....");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
-            pDialog.show();
+            Toast.makeText(AddActivity.this, "Uploading Data .... ", Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -354,7 +394,7 @@ public class AddActivity extends FragmentActivity{
                 params.add(new BasicNameValuePair("province", province));
                 params.add(new BasicNameValuePair("po", po));
                 params.add(new BasicNameValuePair("telephone", telephone));
-                params.add(new BasicNameValuePair("nrooms", nrooms));
+                params.add(new BasicNameValuePair("nroom", nrooms));
                 params.add(new BasicNameValuePair("noccupants", noccupants));
                 params.add(new BasicNameValuePair("nstorey", nstorey));
                 params.add(new BasicNameValuePair("material", material));
@@ -396,7 +436,6 @@ public class AddActivity extends FragmentActivity{
          * **/
         protected void onPostExecute(String file_url) {
             // dismiss the dialog once product deleted
-            pDialog.dismiss();
             if (file_url != null){
                 Toast.makeText(AddActivity.this, file_url, Toast.LENGTH_LONG).show();
             }
