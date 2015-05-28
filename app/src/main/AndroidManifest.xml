@@ -6,7 +6,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@android:style/Theme.WithActionBar" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -16,6 +16,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <activity android:name=".AddActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="Add Survey">
+        </activity>
+        <activity android:name=".EditActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="Edit Survey">
+        </activity>
+        <provider
+            android:authorities="uklid.com.pipesurveys.provider"
+            android:name="uklid.com.pipesurvey.PipeSurveysProvider"
+            android:exported="true"
+            android:readPermission="uklid.com.pipesurveys.READWRITE"
+            android:writePermission="uklid.com.pipesurveys.READWRITE"/>
+
     </application>
 
 </manifest>

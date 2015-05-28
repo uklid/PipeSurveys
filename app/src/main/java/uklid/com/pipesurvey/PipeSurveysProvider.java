@@ -41,6 +41,7 @@ public class PipeSurveysProvider extends ContentProvider {
     private void deleteDatabase() {
         mOpenHelper.close();
         PipeSurveysDatabase.deleteDatabase(getContext());
+
         mOpenHelper = new PipeSurveysDatabase(getContext());
     }
 

@@ -5,30 +5,203 @@
     android:orientation="vertical"
     android:padding="17dp">
 
-    <EditText
-        android:id="@+id/surveyPipeCode"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="ชื่อ" />
+        android:gravity="right">
+
+        <Button
+            android:id="@+id/savedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="บันทึกข้อมูล"
+            android:width="100dp" />
+
+        <Button
+            android:id="@+id/cameraCaptureButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ถ่ายรูป"
+            android:width="100dp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="แนวท่อส่ง"/>
+        <EditText
+            android:id="@+id/pipeCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/pipeCode"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="แผ่นที่"
+            />
+        <EditText
+            android:id="@+id/sheetNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/sheetNo" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="วันที่"/>
+        <EditText
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/date"
+            android:inputType="date" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="ลำดับที่"/>
 
     <EditText
-        android:id="@+id/surveyCode"
+        android:id="@+id/order"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email address"
-        android:inputType="textEmailAddress" />
+        android:hint="@string/order"
+        android:inputType="number"/>
+        </LinearLayout>
+    <EditText
+        android:id="@+id/code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/code"/>
+    <EditText
+        android:id="@+id/utilization"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/utilization"/>
 
     <EditText
-        android:id="@+id/surveyUtilization"
+        android:id="@+id/nroom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Phone number"
-        android:inputType="phone" />
+        android:hint="@string/nroom"
+        android:inputType="number"/>
+    <EditText
+        android:id="@+id/noccupant"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/noccupant"
+        android:inputType="number"/>
+    <EditText
+        android:id="@+id/nstorey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/nstorey"
+        android:inputType="number"/>
 
-    <Button
-        android:id="@+id/savedButton"
+
+    <Spinner
+        android:id="@+id/material"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save" />
+        android:hint="@string/material"
+        android:entries="@array/materials_array"/>
+
+    <EditText
+        android:id="@+id/foccupant"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/foccupant"/>
+    <EditText
+        android:id="@+id/construction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/construction"/>
+    <EditText
+        android:id="@+id/type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/type"/>
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/name"/>
+    <EditText
+        android:id="@+id/no"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/no"/>
+    <EditText
+        android:id="@+id/moo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/moo"/>
+    <EditText
+        android:id="@+id/soi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/soi"/>
+    <EditText
+        android:id="@+id/road"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/road"/>
+    <EditText
+        android:id="@+id/subdistrict"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/subdistrict"/>
+    <EditText
+        android:id="@+id/district"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/district"/>
+    <EditText
+        android:id="@+id/province"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/province"/>
+    <EditText
+        android:id="@+id/po"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/po"/>
+    <EditText
+        android:id="@+id/telephone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/telephone"/>
+
+
+
+
 
 </LinearLayout>

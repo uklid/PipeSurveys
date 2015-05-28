@@ -3,4 +3,42 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="pipeCode">แนวท่อส่ง</string>
+    <string name="sheetNo">แผ่นที่</string>
+    <string name="date">วันที่</string>ห
+    <string name="order">ลำดับที่</string>
+    <string name="code">CODE</string>
+    <string name="utilization">ประเภทอุตสาหากรรม/กิจกรรม</string>
+    <string name="nroom">จำนวนห้อง</string>
+    <string name="noccupant">จำนวนผู้พักอาศัย</string>
+    <string name="nstorey">จำนวนชั้น</string>
+
+    <string name="material">วัสดุก่อสร้าง</string>
+
+    <string name="foccupant">ความถี่ของการพักอาศัย</string>
+    <string name="type">ประเภทโรงเรือน</string>
+    <string name="name">เชื่อโรงเรียน</string>
+    <string name="no">เลขที่</string>
+    <string name="moo">หมู่</string>
+    <string name="soi">ซอย</string>
+    <string name="road">ถนน</string>
+    <string name="subdistrict">ตำบล</string>
+    <string name="district">อำเภอ</string>
+    <string name="province">จังหวัด</string>
+    <string name="po">รหัสไปรษณีย์</string>
+    <string name="telephone">โทร</string>
+    <string name="construction">การก่อสร้าง</string>
+    <string name="add_record">เพิ่มข้อมูลใหม่</string>
+    
+    <string-array name="materials_array">
+        <item>C ปูน</item>
+        <item>W ไม้</item>
+        <item>ST เหล็ก</item>
+        <item>CW ไม้/ปูน</item>
+        <item>TEMP โรงเรือนแบบไม่ถาวร</item>
+        <item>O-TANK ภังบรรจุน้ำมันเชื้อเพลิง</item>
+        <item>G-TANK ถังบรรจุก๊าซปิโตรเลียมเหลว</item>
+        <item>TANK ถังเก็บน้ำ/เคมีอื่นๆ</item>
+    </string-array>
 </resources>

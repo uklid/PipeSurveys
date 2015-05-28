@@ -14,13 +14,25 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical">
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/secondary_text_default_material_dark"
+            android:textSize="@dimen/dp10"
+            android:text="@string/pipeCode"/>
         <TextView
             android:id="@+id/pipesurvey_pipecode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/grey"
             android:textSize="@dimen/dp20" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/secondary_text_default_material_dark"
+            android:textSize="@dimen/dp10"
+            android:text="@string/code"/>
         <TextView
             android:id="@+id/pipesurvey_code"
             android:layout_width="match_parent"
@@ -28,11 +40,21 @@
             android:textColor="@color/grey"
             android:textSize="@dimen/dp20" />
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/secondary_text_default_material_dark"
+            android:textSize="@dimen/dp10"
+            android:text="@string/utilization"/>
+        <TextView
             android:id="@+id/pipesurvey_utilization"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/grey"
             android:textSize="@dimen/dp20" />
+        <ImageView
+            android:id="@+id/pipesurvey_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

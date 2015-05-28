@@ -2,6 +2,7 @@ package uklid.com.pipesurvey;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
@@ -11,7 +12,7 @@ import android.provider.BaseColumns;
 public class PipeSurveysDatabase extends SQLiteOpenHelper {
     private static final String TAG = PipeSurveysDatabase.class.getSimpleName();
     private static final String DATABASE_NAME = "pipe_surveys_database.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 5;
     private final Context mContext;
 
     interface Tables {
@@ -33,7 +34,7 @@ public class PipeSurveysDatabase extends SQLiteOpenHelper {
                         + PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_CODE + " TEXT NOT NULL,"
                         + PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_ORDER + " INT NOT NULL,"
                         + PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_UTILIZATION + " TEXT NOT NULL,"
-                        + PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_TYPE + " TEXT NOT NULL,"
+                        + PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_TYPE + " TEXT,"
                         + PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_NAME + " TEXT,"
                         + PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_NO + " TEXT,"
                         + PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_MOO + " TEXT,"
@@ -50,6 +51,7 @@ public class PipeSurveysDatabase extends SQLiteOpenHelper {
                         + PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_MATERIAL + " TEXT NOT NULL,"
                         + PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_FOCCUPANTS + " TEXT,"
                         + PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_CONSTRUCTION + " TEXT,"
+
                         + PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_PICTURENAME + " TEXT)"
         );
 
@@ -58,6 +60,14 @@ public class PipeSurveysDatabase extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         int version = oldVersion;
+
+        try{
+            db.execSQL("DROP TABLE IF EXISTS "+ Tables.PIPESURVEYS);
+            onCreate(db);
+        }catch (SQLiteException e) {}
+
+
+
         if (version == 1) {
             // Add some extra fields to the database w/o deleting existing data
             version = 2;
@@ -68,7 +78,8 @@ public class PipeSurveysDatabase extends SQLiteOpenHelper {
         }
     }
 
-    public static void deleteDatabase(Context context) {
+    public static void deleteDatabase(Context context)
+    {
         context.deleteDatabase(DATABASE_NAME);
     }
 }

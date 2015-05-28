@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -69,6 +70,12 @@ public class PipeSurveysDialog extends DialogFragment{
                     ContentResolver contentResolver = getActivity().getContentResolver();
                     Uri uri = PipeSurveysContract.URI_TABLE;
                     contentResolver.delete(uri, null, null);
+
+
+
+
+
+
                     Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
