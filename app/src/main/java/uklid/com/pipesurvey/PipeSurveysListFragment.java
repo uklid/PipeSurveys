@@ -1,9 +1,10 @@
 package uklid.com.pipesurvey;
 
-import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 
 import java.util.List;
 
@@ -18,15 +19,15 @@ implements LoaderManager.LoaderCallbacks<List<PipeSurvey>>
     private PipeSurveysCustomAdapter mAdapter;
     private static final int LOADER_ID = 1;
     private ContentResolver mContentResolver;
-    private List<Friend> mFriends;
+    private List<PipeSurvey> mPipeSurveys;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
         mContentResolver = getActivity().getContentResolver();
-        mAdapter = new FriendsCustomAdapter(getActivity(), getChildFragmentManager());
-        setEmptyText("No Friends");
+        mAdapter = new PipeSurveysCustomAdapter(getActivity(), getChildFragmentManager());
+        setEmptyText("No Surveys found");
         setListAdapter(mAdapter);
         setListShown(false);
 
@@ -34,15 +35,15 @@ implements LoaderManager.LoaderCallbacks<List<PipeSurvey>>
     }
 
     @Override
-    public Loader<List<Friend>> onCreateLoader(int id, Bundle args) {
+    public Loader<List<PipeSurvey>> onCreateLoader(int id, Bundle args) {
         mContentResolver = getActivity().getContentResolver();
-        return new FriendsListLoader(getActivity(), FriendsContract.URI_TABLE,mContentResolver);
+        return new PipeSurveysListLoader(getActivity(), PipeSurveysContract.URI_TABLE,mContentResolver);
     }
 
     @Override
-    public void onLoadFinished(Loader<List<Friend>> loader, List<Friend> friends) {
-        mAdapter.setData(friends);
-        mFriends = friends;
+    public void onLoadFinished(Loader<List<PipeSurvey>> loader, List<PipeSurvey> pipeSurveys) {
+        mAdapter.setData(pipeSurveys);
+        mPipeSurveys = pipeSurveys;
 
         if(isResumed()){
             setListShown(true);
@@ -52,7 +53,7 @@ implements LoaderManager.LoaderCallbacks<List<PipeSurvey>>
     }
 
     @Override
-    public void onLoaderReset(Loader<List<Friend>> loader) {
+    public void onLoaderReset(Loader<List<PipeSurvey>> loader) {
         mAdapter.setData(null);
     }
 }
