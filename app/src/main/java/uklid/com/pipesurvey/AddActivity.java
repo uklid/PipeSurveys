@@ -1,5 +1,6 @@
 package uklid.com.pipesurvey;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
@@ -23,11 +25,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.security.Provider;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Uklid on 5/28/2015.
@@ -45,6 +54,19 @@ public class AddActivity extends FragmentActivity{
     private static final int CAMERA_REQUEST = 1888;
 
     private Cursor mCursor;
+
+    //JSON
+    private ProgressDialog pDialog;
+    JSONParser jsonParser = new JSONParser();
+    private static final String TAG_SUCCESS = "success";
+    private static final String TAG_MESSAGE = "message";
+    private static final String LOGIN_URL = "http://http://uklidyeesarapat.com/addSurvey.php";
+    private String fileName;
+    //ENDJSON
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +103,7 @@ public class AddActivity extends FragmentActivity{
         mContentResolver = AddActivity.this.getContentResolver();
 
         mCursor = mContentResolver.query(PipeSurveysContract.URI_TABLE,null,null,null,PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_ID + " DESC");
-        if(mCursor != null) {
+        if(mCursor != null && mCursor.getCount() !=0) {
             mCursor.moveToFirst();
             int order = Integer.parseInt(mCursor.getString(
                     mCursor.getColumnIndex(PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_ORDER)));
@@ -167,7 +189,7 @@ public class AddActivity extends FragmentActivity{
                     values.put(PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_FOCCUPANTS, mFOccupant.getText().toString());
                     values.put(PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_CONSTRUCTION, mConstruction.getText().toString());
 
-                    String fileName = mPipeCode.getText().toString() + "-" + mSheetNo.getText().toString() + "-" + mCode.getText().toString()+".jpg";
+                    fileName = mPipeCode.getText().toString() + "-" + mSheetNo.getText().toString() + "-" + mCode.getText().toString()+".jpg";
                     values.put(PipeSurveysContract.PipeSurveysColumns.PIPESURVEYS_PICTURENAME, fileName);
 
 
@@ -190,6 +212,12 @@ public class AddActivity extends FragmentActivity{
 
                     Uri returned = mContentResolver.insert(PipeSurveysContract.URI_TABLE, values);
 
+                    //start parser
+
+
+
+
+                    //finish parser
 
                     Log.d(LOG_TAG, "record id returned is " + returned.toString());
                     Intent intent = new Intent(AddActivity.this, MainActivity.class);
@@ -255,4 +283,128 @@ public class AddActivity extends FragmentActivity{
             super.onBackPressed();
         }
     }
+
+
+
+    class AddPipeSurvaeysToServer extends AsyncTask<String, String, String> {
+
+        /**
+         * Before starting background thread Show Progress Dialog
+         * */
+        boolean failure = false;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(AddActivity.this);
+            pDialog.setMessage("Upload Data....");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... args) {
+            // Check for success tag
+            int success;
+            String pipecode = mPipeCode.getText().toString();
+            String sheetno = mSheetNo.getText().toString();
+            String date = mDate.getText().toString();
+            String code = mCode.getText().toString();
+            String order = mOrder.getText().toString();
+            String utilization = mUtilization.getText().toString();
+            String type = mType.getText().toString();
+            String name = mName.getText().toString();
+            String no = mNo.getText().toString();
+            String moo = mMoo.getText().toString();
+            String soi = mSoi.getText().toString();
+            String road = mRoad.getText().toString();
+            String subdistrict = mSubDistrict.getText().toString();
+            String district = mDistrict.getText().toString();
+            String province = mProvince.getText().toString();
+            String po = mPo.getText().toString();
+            String telephone = mTelephone.getText().toString();
+            String noccupants = mNOccupant.getText().toString();
+            String foccupants = mFOccupant.getText().toString();
+            String nstorey = mNStorey.getText().toString();
+            String nrooms = mNRoom.getText().toString();
+            String material = mMaterial.getSelectedItem().toString();
+            String construction = mConstruction.getText().toString();
+            String picturename = fileName;
+
+            try {
+                // Building Parameters
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+
+
+                params.add(new BasicNameValuePair("pipecode", pipecode));
+                params.add(new BasicNameValuePair("sheetno", sheetno));
+                params.add(new BasicNameValuePair("date", date));
+                params.add(new BasicNameValuePair("code", code));
+                params.add(new BasicNameValuePair("order", order));
+                params.add(new BasicNameValuePair("utilization", utilization));
+                params.add(new BasicNameValuePair("type", type));
+                params.add(new BasicNameValuePair("name", name));
+                params.add(new BasicNameValuePair("no", no));
+                params.add(new BasicNameValuePair("moo", moo));
+                params.add(new BasicNameValuePair("soi", soi));
+                params.add(new BasicNameValuePair("road", road));
+                params.add(new BasicNameValuePair("subdistrict", subdistrict));
+                params.add(new BasicNameValuePair("district", district));
+                params.add(new BasicNameValuePair("province", province));
+                params.add(new BasicNameValuePair("po", po));
+                params.add(new BasicNameValuePair("telephone", telephone));
+                params.add(new BasicNameValuePair("nrooms", nrooms));
+                params.add(new BasicNameValuePair("noccupants", noccupants));
+                params.add(new BasicNameValuePair("nstorey", nstorey));
+                params.add(new BasicNameValuePair("material", material));
+                params.add(new BasicNameValuePair("construction", construction));
+                params.add(new BasicNameValuePair("picturename", picturename));
+                params.add(new BasicNameValuePair("foccupants", foccupants));
+
+
+
+                Log.d("request!", "starting");
+
+                //Posting user data to script
+                JSONObject json = jsonParser.makeHttpRequest(
+                        LOGIN_URL, "POST", params);
+
+                // full json response
+                Log.d("Login attempt", json.toString());
+
+                // json success element
+                success = json.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                    Log.d("User Created!", json.toString());
+                    finish();
+                    return json.getString(TAG_MESSAGE);
+                }else{
+                    Log.d("Login Failure!", json.getString(TAG_MESSAGE));
+                    return json.getString(TAG_MESSAGE);
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+
+        }
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog once product deleted
+            pDialog.dismiss();
+            if (file_url != null){
+                Toast.makeText(AddActivity.this, file_url, Toast.LENGTH_LONG).show();
+            }
+
+        }
+
+    }
+
+
+
 }
